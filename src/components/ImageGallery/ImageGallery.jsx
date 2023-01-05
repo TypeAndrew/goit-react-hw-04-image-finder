@@ -1,24 +1,23 @@
-import { Component } from "react";
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem";
+import PropTypes from "prop-types";
 
-export class ImageGallery extends Component {
-    state = {
-    
-    }
+export function ImageGallery(props) {
 
-
-
-    render() {
-        const { elements, status } = this.props;
-        return (
+    const { elements, status, handleToggle } = props;
+    return (
             
-            <ul className="ImageGallery">
+        <ul className="ImageGallery" onClick={ handleToggle }>
 
-                { elements.map(element =>
-                    <ImageGalleryItem key={element.id} element={element} status={ status } />)}
-            </ul>
+            { elements.map(element =>
+                <ImageGalleryItem key={element.id} element={element} status={status} />)}
+        </ul>
             
-        )
-    }
+    )
+   
 }
 
+ImageGalleryItem.propTypes = {
+    elements: PropTypes.object,
+    status: PropTypes.string,
+     handleToggle: PropTypes.func,   
+    }

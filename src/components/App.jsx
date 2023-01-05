@@ -2,15 +2,11 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery} from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
-import { Modal } from './Modal/Modal';
 import { Component } from 'react';
 
 
 import { STATUS } from '../constants/status.constants';
 import { getImages } from '../services/images.sevice';
-
-
-
 //const language = 'en-US';
 
 export class App extends Component {
@@ -19,7 +15,8 @@ export class App extends Component {
     status: STATUS.idle, // 'idle', 'loading', 'success', 'error'
     search: '',
     page: 1,
-    per_page: 15
+    per_page: 15,
+    isModalOpen: false
   };
   
    fetchData = async ({ per_page = 1, search = '' }) => {
@@ -60,16 +57,23 @@ export class App extends Component {
     this.fetchData({ per_page: per_page,  search: search});
   }
 
+  handleToggle = () => {
+    this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
+  };
+
   render() {
     const { images,per_page,status  } = this.state;
   return(
-    <div  className={"App"} >
+    <div className={"App"} >
+      
       <Searchbar onSearchLoad={this.onSearchLoad } />
-      {<ImageGallery elements={images} status={ status} />}
+      {<ImageGallery elements={images} status={status} handleToggle={ this.handleToggle} />}
       {status === STATUS.loading && < Loader />}
       <Button onButtonLoad={this.onButtonLoad} per_page={ per_page } />
-      <Modal/>
+      
     </div>
     );
     }
 };
+
+

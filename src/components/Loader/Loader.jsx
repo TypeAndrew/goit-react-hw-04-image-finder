@@ -1,6 +1,6 @@
 import { Dna } from 'react-loader-spinner'
 
-export function Loader(props) { 
+export function Loader() { 
 
     return (
         <Dna

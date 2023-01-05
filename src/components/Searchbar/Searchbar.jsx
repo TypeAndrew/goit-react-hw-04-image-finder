@@ -1,20 +1,18 @@
 
 import { Component } from "react";
+import PropTypes from "prop-types";
 
 export class Searchbar extends Component { 
 
-    
-    
     state = {
-            search: ''
+        search: ''
     }
 
     onInputChange = (evt) => {
         this.setState({ search: evt.target.value });
     }
 
-
-    onSubmit = (evt) =>{
+                   onSubmit = (evt) =>{
         
         evt.preventDefault();
         const { search } = this.state;
@@ -25,7 +23,8 @@ export class Searchbar extends Component {
 
     render() {
     
-        const { search } = this.state;
+    const { search } = this.state;
+        
     return (<header className="Searchbar">
             <form className="SearchForm" onSubmit={this.onSubmit}>
                 <button type="submit" className="SearchForm-button" >
@@ -46,4 +45,9 @@ export class Searchbar extends Component {
             </header>)
     }
   
+}
+
+Searchbar.propTypes = {
+    search: PropTypes.string,
+   
 }

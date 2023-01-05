@@ -50,7 +50,7 @@ export class App extends Component {
   onSearchLoad = (search='') =>{
      
     this.setState({ per_page: 15,search: search});
-    //this.fetchData({ per_page: this.state.per_page , search: search  });
+    //this.fetchData({ per_page: this.state.per_page , search: search  }); 
   }
 
   onButtonLoad = () => {

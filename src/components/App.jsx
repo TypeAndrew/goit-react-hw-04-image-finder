@@ -35,20 +35,29 @@ export class App extends Component {
 
   componentDidMount() {
     
-    this.fetchData({ per_page: 15 });
+    this.fetchData({ per_page: 15,  search: '' });
 
+  }
+
+  componentDidUpdate(_,prevState) {
+    if (prevState.search !== this.state.search) {
+      this.setState({ per_page: 15 });
+      this.fetchData({ per_page: this.state.per_page , search: this.state.search  });
+     } 
+     //this.fetchData({ per_page: this.stete.per_page, search: this.stete.search });
   }
 
   onSearchLoad = (search='') =>{
      
-    
-    this.fetchData({ per_page: this.state.per_page , search: search  });
+    this.setState({ per_page: 15,search: search});
+    //this.fetchData({ per_page: this.state.per_page , search: search  });
   }
 
   onButtonLoad = () => {
-    const per_page = this.state.per_page + 15; 
-    this.setState({ per_page: per_page });
-    this.fetchData({ per_page: per_page });
+    const per_page = this.state.per_page + 15;
+    const search = this.state.search;
+    this.setState({ per_page: per_page,  search: search});
+    this.fetchData({ per_page: per_page,  search: search});
   }
 
   render() {

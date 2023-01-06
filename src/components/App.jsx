@@ -7,7 +7,7 @@ import { Component } from 'react';
 
 import { STATUS } from '../constants/status.constants';
 import { getImages } from '../services/images.sevice';
-//const language = 'en-US';
+
 
 export class App extends Component {
   state = {
@@ -15,14 +15,14 @@ export class App extends Component {
     status: STATUS.idle, // 'idle', 'loading', 'success', 'error'
     search: '',
     page: 1,
-    per_page: 15,
+    
     isModalOpen: false
   };
   
-   fetchData = async ({ per_page = 1, search = '' }) => {
+   fetchData = async ({ page = 1, search = '' }) => {
     this.setState({ status: STATUS.loading });
     try {
-      const data = await getImages({ per_page, search });
+      const data = await getImages({ page, search });
       this.setState({ images: data.hits, status: STATUS.success });
     } catch (error) {
       console.log(error);
@@ -32,29 +32,29 @@ export class App extends Component {
 
   componentDidMount() {
     
-    this.fetchData({ per_page: 15,  search: '' });
+    this.fetchData({ page: 1,  search: '' });
 
   }
 
   componentDidUpdate(_,prevState) {
     if (prevState.search !== this.state.search) {
-      this.setState({ per_page: 15 });
-      this.fetchData({ per_page: this.state.per_page , search: this.state.search  });
+      this.setState({ page: 1 });
+      this.fetchData({ page: this.state.page , search: this.state.search  });
      } 
-     //this.fetchData({ per_page: this.stete.per_page, search: this.stete.search });
+     
   }
 
   onSearchLoad = (search='') =>{
      
-    this.setState({ per_page: 15,search: search});
-    //this.fetchData({ per_page: this.state.per_page , search: search  }); 
+    this.setState({ page: 1,search: search});
+    
   }
 
   onButtonLoad = () => {
-    const per_page = this.state.per_page + 15;
+    const page = this.state.page + 1;
     const search = this.state.search;
-    this.setState({ per_page: per_page,  search: search});
-    this.fetchData({ per_page: per_page,  search: search});
+    this.setState({ page: page,  search: search});
+    this.fetchData({ page: page,  search: search});
   }
 
   handleToggle = () => {
@@ -62,14 +62,17 @@ export class App extends Component {
   };
 
   render() {
-    const { images,per_page,status  } = this.state;
-  return(
+    
+  const { images, page, status } = this.state;
+  
+    return (
     <div className={"App"} >
       
-      <Searchbar onSearchLoad={this.onSearchLoad } />
-      {<ImageGallery elements={images} status={status} handleToggle={ this.handleToggle} />}
-      {status === STATUS.loading && < Loader />}
-      <Button onButtonLoad={this.onButtonLoad} per_page={ per_page } />
+      <Searchbar onSearchLoad={this.onSearchLoad} />
+       {status === STATUS.loading
+        ? < Loader />
+        :<ImageGallery elements={images} status={status} handleToggle={ this.handleToggle} />}
+      <Button onButtonLoad={this.onButtonLoad} page={ page } />
       
     </div>
     );

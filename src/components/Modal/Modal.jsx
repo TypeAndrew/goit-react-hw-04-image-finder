@@ -1,16 +1,30 @@
 import PropTypes from "prop-types";
+import { Component } from "react";
 
-export function Modal(props) { 
+export class Modal extends Component { 
 
-  const { largeImageURL } = props; 
+    componentDidMount() {
+        const { onClose } = this.props;
+        window.addEventListener('keydown', onClose)
+    }
 
+    componentWillUnmount() {
+        const { onClose } = this.props;
+        window.removeEventListener('keydown',onClose)
+    }
+
+    render(){
+        
+    const { largeImageURL } = this.props; 
+        
     return (
             <div className="Overlay">
-                <div className="Modal">
+                <div className="Modal" >
                     <img src={largeImageURL} alt="" />
                 </div>
             </div>
         )
+    }   
   
 }
 

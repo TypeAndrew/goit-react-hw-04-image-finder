@@ -10,7 +10,7 @@ export class ImageGalleryItem extends Component {
         isModalOpen: false
     };
 
-    handleIsModalOpen = (evt) => {
+    handleIsModalOpen = () => {
        
         this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
     }

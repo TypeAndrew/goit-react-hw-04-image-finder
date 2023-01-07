@@ -16,7 +16,7 @@ export class Modal extends Component {
 
     handleIsModalClose = (evt) => {
         const { onClose } = this.props;
-        if (evt.currentTarget === evt.target) {
+        if (evt.currentTarget !== evt.target) {
             onClose(); 
         }   
     }
@@ -26,10 +26,11 @@ export class Modal extends Component {
     const { largeImageURL, onClose} = this.props; 
         
     return (
-            <div className="Overlay" onClick={this.handleIsModalClose}>
-                <div className="Modal" >
+            <div className="Overlay" >
+                <div className="Modal" onClick={this.handleIsModalClose}>
+                <button style={{marginLeft: 'auto' }}type="button" onClick={ onClose}>X</button>
                 <img src={largeImageURL} alt="" />
-                <button type="button" onClick={ onClose}>X</button>
+                
                 </div>
             </div>
         )

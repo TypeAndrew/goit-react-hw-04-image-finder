@@ -18,12 +18,13 @@ export class App extends Component {
     
     isModalOpen: false
   };
-  
-   fetchData = async ({ page = 1, search = '' }) => {
+   
+
+   fetchData = async ({ page , search  }) => {
     this.setState({ status: STATUS.loading });
     try {
       const data = await getImages({ page, search });
-      this.setState({ images: data.hits, status: STATUS.success });
+      this.setState({ images: [...this.state.images , ...data.hits] , status: STATUS.success });
     } catch (error) {
       console.log(error);
       this.setState({ status: STATUS.error });
@@ -33,20 +34,20 @@ export class App extends Component {
   componentDidMount() {
     
     this.fetchData({ page: 1,  search: '' });
-
+    this.scrollToBottom();
   }
 
   componentDidUpdate(_,prevState) {
-    if (prevState.search !== this.state.search) {
-      this.setState({ page: 1 });
+    if (prevState.search !== this.state.search || prevState.page !== this.state.page) {
+      //this.setState({ page: 1 });
       this.fetchData({ page: this.state.page , search: this.state.search  });
      } 
-     
+     this.scrollToBottom(); 
   }
 
   onSearchLoad = (search='') =>{
      
-    this.setState({ page: 1,search: search});
+    this.setState({ page: 1,search: search, images: [] });
     
   }
 
@@ -54,13 +55,17 @@ export class App extends Component {
     const page = this.state.page + 1;
     const search = this.state.search;
     this.setState({ page: page,  search: search});
-    this.fetchData({ page: page,  search: search});
+    
   }
 
-  handleToggle = () => {
-    this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
-  };
+  handleToggle = (evt) => {
+    
+      this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
+  }
 
+  scrollToBottom = () => {
+    this.el.scrollIntoView({ behavior: 'smooth' });
+  }
   render() {
     
   const { images, page, status } = this.state;
@@ -73,10 +78,12 @@ export class App extends Component {
         ? < Loader />
         :<ImageGallery elements={images} status={status} handleToggle={ this.handleToggle} />}
       <Button onButtonLoad={this.onButtonLoad} page={ page } />
+      <div ref={el => { this.el = el; }} />
+      </div>
       
-    </div>
     );
     }
 };
+
 
 

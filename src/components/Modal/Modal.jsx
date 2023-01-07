@@ -3,6 +3,7 @@ import { Component } from "react";
 
 export class Modal extends Component { 
 
+    
     componentDidMount() {
         const { onClose } = this.props;
         window.addEventListener('keydown', onClose)
@@ -13,14 +14,22 @@ export class Modal extends Component {
         window.removeEventListener('keydown',onClose)
     }
 
+    handleIsModalClose = (evt) => {
+        const { onClose } = this.props;
+        if (evt.currentTarget === evt.target) {
+            onClose(); 
+        }   
+    }
+    
     render(){
         
-    const { largeImageURL } = this.props; 
+    const { largeImageURL, onClose} = this.props; 
         
     return (
-            <div className="Overlay">
+            <div className="Overlay" onClick={this.handleIsModalClose}>
                 <div className="Modal" >
-                    <img src={largeImageURL} alt="" />
+                <img src={largeImageURL} alt="" />
+                <button type="button" onClick={ onClose}>X</button>
                 </div>
             </div>
         )

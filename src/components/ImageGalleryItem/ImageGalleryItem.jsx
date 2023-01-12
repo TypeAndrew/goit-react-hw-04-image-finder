@@ -4,9 +4,8 @@ import PropTypes from "prop-types";
 
 export const ImageGalleryItem = (props) => {
      
-   // state = {
     const [isModalOpen, setIsModalOpen] = useState(false); 
-   // };
+  
 
     const handleIsModalOpen = () => {
        

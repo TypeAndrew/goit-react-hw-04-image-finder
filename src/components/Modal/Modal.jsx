@@ -27,7 +27,6 @@ export const Modal = ({ largeImageURL, onClose }) => {
     }
     
    
-        
     return (
             <div className="Overlay" >
                 <div className="Modal" onClick={handleIsModalClose}>

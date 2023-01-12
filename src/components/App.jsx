@@ -2,87 +2,91 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery} from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
-import { Component } from 'react';
-
-
+import { useState, useEffect, useRef } from 'react';
 import { STATUS } from '../constants/status.constants';
 import { getImages } from '../services/images.sevice';
 
 
-export class App extends Component {
-  state = {
-    images: [],
-    status: STATUS.idle, // 'idle', 'loading', 'success', 'error'
-    search: '',
-    page: 1,
-    
-    isModalOpen: false
-  };
+export const App = () => {
+  //state = {
+    const [images,setImages] = useState([]);
+    const [status,setStatus] = useState(STATUS.idle); // 'idle', 'loading', 'success', 'error'
+    const [search,setSearch] = useState('');
+    const [page,setPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const divRef = useRef();
+  //};
    
 
-   fetchData = async ({ page , search  }) => {
-    this.setState({ status: STATUS.loading });
+  const fetchData = async ({ page , search  }) => {
+    setStatus(STATUS.loading);
     try {
       const data = await getImages({ page, search });
-      this.setState({ images: [...this.state.images , ...data.hits] , status: STATUS.success });
+      setImages( prev=>([...prev , ...data.hits]));
+      setStatus(STATUS.success ); 
     } catch (error) {
       console.log(error);
-      this.setState({ status: STATUS.error });
+      setStatus(STATUS.error );
     }
   };
 
-  componentDidMount() {
+  useEffect(()=> {
     
-    this.fetchData({ page: 1,  search: '' });
-    this.scrollToBottom();
+    fetchData({ page: 1,  search: '' });
+   // scrollToBottom();
+  },[])
+
+  useEffect(()=> {
+    
+      
+      fetchData({ page: page , search: search  });
+ 
+   //  scrollToBottom(); 
+  },[ search,page])
+
+
+
+  const onSearchLoad = (search='') =>{
+    
+    setPage(1);  
+    setSearch(search); 
+    setImages([]); 
+    //setState({ page: 1,search: search, images: [] });
+    
   }
 
-  componentDidUpdate(_,prevState) {
-    if (prevState.search !== this.state.search || prevState.page !== this.state.page) {
-      //this.setState({ page: 1 });
-      this.fetchData({ page: this.state.page , search: this.state.search  });
-     } 
-     this.scrollToBottom(); 
-  }
-
-  onSearchLoad = (search='') =>{
+  const onButtonLoad = () => {
      
-    this.setState({ page: 1,search: search, images: [] });
-    
+    setPage(page+1);
+    setSearch(search); 
+   // setSearch(search); 
   }
 
-  onButtonLoad = () => {
-    const page = this.state.page + 1;
-    const search = this.state.search;
-    this.setState({ page: page,  search: search});
+  const handleToggle = (evt) => {
     
+    setIsModalOpen(prevState => ( !isModalOpen ));
   }
 
-  handleToggle = (evt) => {
-    
-      this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
-  }
+  //const scrollToBottom = () => {
+  //  divRef.scrollIntoView({ behavior: 'smooth' });
+ // }
 
-  scrollToBottom = () => {
-    this.el.scrollIntoView({ behavior: 'smooth' });
-  }
-  render() {
     
-  const { images, page, status } = this.state;
+  //const { images, page, status } = this.state;
   
     return (
     <div className={"App"} >
       
-      <Searchbar onSearchLoad={this.onSearchLoad} />
+      <Searchbar onSearchLoad={onSearchLoad} />
        {status === STATUS.loading
         ? < Loader />
-        :<ImageGallery elements={images} status={status} handleToggle={ this.handleToggle} />}
-      <Button onButtonLoad={this.onButtonLoad} page={ page } />
-      <div ref={el => { this.el = el; }} />
+        :<ImageGallery elements={images} status={status} handleToggle={ handleToggle} />}
+      <Button onButtonLoad={onButtonLoad} page={ page } />
+      <div ref={divRef} />
       </div>
       
     );
-    }
+  
 };
 
 

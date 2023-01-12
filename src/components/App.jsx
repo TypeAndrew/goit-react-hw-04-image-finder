@@ -8,14 +8,12 @@ import { getImages } from '../services/images.sevice';
 
 
 export const App = () => {
-  //state = {
+
     const [images,setImages] = useState([]);
     const [status,setStatus] = useState(STATUS.idle); // 'idle', 'loading', 'success', 'error'
     const [search,setSearch] = useState('');
     const [page,setPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const divRef = useRef();
-  //};
    
 
   const fetchData = async ({ page , search  }) => {
@@ -30,18 +28,13 @@ export const App = () => {
     }
   };
 
-  useEffect(()=> {
-    
-    fetchData({ page: 1,  search: '' });
-   // scrollToBottom();
-  },[])
 
   useEffect(()=> {
     
       
       fetchData({ page: page , search: search  });
  
-   //  scrollToBottom(); 
+     
   },[ search,page])
 
 
@@ -51,15 +44,14 @@ export const App = () => {
     setPage(1);  
     setSearch(search); 
     setImages([]); 
-    //setState({ page: 1,search: search, images: [] });
-    
+      
   }
 
   const onButtonLoad = () => {
      
     setPage(page+1);
     setSearch(search); 
-   // setSearch(search); 
+   
   }
 
   const handleToggle = (evt) => {
@@ -67,12 +59,6 @@ export const App = () => {
     setIsModalOpen(prevState => ( !isModalOpen ));
   }
 
-  //const scrollToBottom = () => {
-  //  divRef.scrollIntoView({ behavior: 'smooth' });
- // }
-
-    
-  //const { images, page, status } = this.state;
   
     return (
     <div className={"App"} >
@@ -82,12 +68,19 @@ export const App = () => {
         ? < Loader />
         :<ImageGallery elements={images} status={status} handleToggle={ handleToggle} />}
       <Button onButtonLoad={onButtonLoad} page={ page } />
-      <div ref={divRef} />
+      <ScrollDown />
       </div>
       
     );
   
 };
 
+const ScrollDown = () => {
+  const divRef = useRef(null);
 
+  useEffect(() => {
+    divRef.current.scrollIntoView({ behavior: 'smooth' });
+  });
 
+  return <div ref={divRef} />;
+}

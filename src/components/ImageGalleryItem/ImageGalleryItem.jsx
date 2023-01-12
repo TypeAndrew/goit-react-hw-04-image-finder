@@ -1,33 +1,28 @@
-import { Component } from "react";
-//import {Loader} from '../Loader/Loader'
-//import { STATUS } from '../../constants/status.constants';
+import { useState } from "react";
 import { Modal } from "components/Modal/Modal";
 import PropTypes from "prop-types";
 
-export class ImageGalleryItem extends Component {
+export const ImageGalleryItem = (props) => {
      
-    state = {
-        isModalOpen: false
-    };
+   // state = {
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+   // };
 
-    handleIsModalOpen = () => {
+    const handleIsModalOpen = () => {
        
-        this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
+        setIsModalOpen(prevState => ( !prevState ));
     }
 
-   
-
-    render() {
-        const { element } = this.props;
-        const { isModalOpen } = this.state; 
+        const { element } = props;
+      
         return (
-            <li className="ImageGalleryItem" onClick={this.handleIsModalOpen } >
+            <li className="ImageGalleryItem" onClick={handleIsModalOpen } >
                 < img className="ImageGalleryItem-image"
                  src={element.webformatURL} alt={element.tags} /> 
-                {isModalOpen && <Modal largeImageURL={element.largeImageURL} onClose={this.handleIsModalOpen } />}
+                {isModalOpen && <Modal largeImageURL={element.largeImageURL} onClose={handleIsModalOpen } />}
             </li>
         )
-    }
+   
 }
 
 ImageGalleryItem.propTypes = {

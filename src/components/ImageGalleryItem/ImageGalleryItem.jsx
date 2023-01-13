@@ -25,7 +25,7 @@ export const ImageGalleryItem = (props) => {
 }
 
 ImageGalleryItem.propTypes = {
-    //status: PropTypes.string,
+    //status: PropTypes.string,//
     element: PropTypes.shape({
         webformatURL: PropTypes.string.isRequired,
         tags: PropTypes.string,
